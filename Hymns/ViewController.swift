@@ -24,10 +24,11 @@ class ViewController: UITableViewController{
                 hymns.append(item)
             }
         }
+        hymns.sort()
+
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-
         return 1
     }
 
