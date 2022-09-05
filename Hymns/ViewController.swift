@@ -24,7 +24,21 @@ class ViewController: UITableViewController{
                 hymns.append(item)
             }
         }
-        hymns.sort()
+        
+        hymns.sort{first, second in
+            var final_string = slice(first, from: " ", to: ".")!
+            if final_string.contains(" "){
+                final_string = slice(final_string, from: 0, to: " ")!
+            }
+            var final_string2 = slice(second, from: " ", to: ".")!
+            if final_string2.contains(" "){
+                final_string2 = slice(final_string2, from: 0, to: " ")!
+            }
+        
+            return Int(final_string)! < Int(final_string2)!
+        }
+        print(hymns)
+        
 
     }
     
@@ -52,6 +66,32 @@ class ViewController: UITableViewController{
         navigationController?.pushViewController(vc, animated: true)
     }
 
+    func slice(_ string: String, from startingIndex: Int, to endIndex: Int) -> String {
+        let chosenString = string
+        var start = chosenString.startIndex
+        if start.hashValue != 0{
+            start = chosenString.index(start, offsetBy: startingIndex)
+        }
+        let end = chosenString.index(start, offsetBy: endIndex)
+        return String(chosenString[start...end])
+    }
+    
+    func slice(_ string: String, from startingIndex: Int, to character: Character) -> String? {
+        let chosenString = string
+        var start = chosenString.startIndex
+        if start.hashValue != 0{
+            start = chosenString.index(start, offsetBy: startingIndex)
+        }
+        guard let end = chosenString.firstIndex(of: character)else{ return nil}
+        return String(chosenString[start..<end])
+    }
 
+    func slice(_ string: String, from character: Character, to secondCharacter: Character) -> String? {
+        let chosenString = string
+        var start = chosenString.firstIndex(of: character)!
+        start = chosenString.index(start, offsetBy: 1)
+        guard let end = chosenString.firstIndex(of: secondCharacter)else{ return nil}
+        return String(chosenString[start..<end])
+    }
 }
 
