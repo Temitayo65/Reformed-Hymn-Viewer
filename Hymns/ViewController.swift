@@ -15,6 +15,7 @@ class ViewController: UITableViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = "Psalms & Hymns"
         let fm = FileManager.default
         let path = Bundle.main.resourcePath!
         let items = try! fm.contentsOfDirectory(atPath: path)
@@ -25,19 +26,46 @@ class ViewController: UITableViewController{
             }
         }
         
+        // Refactor this sorting later
+        
         hymns.sort{first, second in
             var final_string = slice(first, from: " ", to: ".")!
+            var before_final: String = ""
+            // checking for versions and enabling sort with version for the end ®
             if final_string.contains(" "){
+                before_final = final_string
                 final_string = slice(final_string, from: 0, to: " ")!
             }
+            
             var final_string2 = slice(second, from: " ", to: ".")!
+            var before_final2: String = ""
+            // checking for versions and enabling sort with version for the end
             if final_string2.contains(" "){
+                before_final2 = final_string2
                 final_string2 = slice(final_string2, from: 0, to: " ")!
             }
-        
+            
+            // To sort by the second the number if the hymn numbers are the same
+            if !before_final.isEmpty && !before_final2.isEmpty{
+                if slice(before_final, from: 0, to: " ")! == slice(before_final2, from: 0, to: " ")!{
+                    let firstIndex = before_final.firstIndex(of: " ")!
+                    let firstStart = before_final.index(firstIndex, offsetBy: 1)
+                    let firstIndexNumber = Int(before_final[firstStart...])!
+                    
+                    let secondIndex = before_final2.firstIndex(of: " ")!
+                    let secondStart = before_final2.index(secondIndex, offsetBy: 1)
+                    let secondindexNumber = Int(before_final2[secondStart...])!
+                    return firstIndexNumber < secondindexNumber
+                }
+            }
+            
+            // To sort by the first number if the hymn numbers are different and don't contain versions or
+            // if there are versions
             return Int(final_string)! < Int(final_string2)!
         }
-        print(hymns)
+        // print(hymns)
+        
+        // Trying to add a search feature...
         
 
     }
